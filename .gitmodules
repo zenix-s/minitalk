@@ -1,0 +1,3 @@
+[submodule "src/lib/printf"]
+	path = src/lib/printf
+	url = git@github.com:zenix-s/ft_printf.git

@@ -1,5 +1,4 @@
-#include "minitalk.h"
-#include <stdio.h>
+#include "../minitalk.h"
 
 int ft_atoi(const char *str) {
   int sign;
@@ -30,6 +29,22 @@ int main(int argc, char **argv) {
   printf("argc: %d\n", argc);
   printf("pid: %d\n", ft_atoi(argv[1]));
 
-  kill(ft_atoi(argv[1]), );
+  char *str = "hola";
+
+  while (*str){
+    write(1, &str, 1);
+    str++;
+  }
+
+  // kill(ft_atoi(argv[1]), 12);
+  // kill(ft_atoi(argv[1]), 10);
+  // usleep(50);
+  // kill(ft_atoi(argv[1]), 12);
+  // usleep(50);
+  // kill(ft_atoi(argv[1]), 12);
+  // usleep(50);
+  // kill(ft_atoi(argv[1]), 10);
+  // usleep(50);
+  // kill(ft_atoi(argv[1]), 10);
   return 0;
 }
