@@ -1,4 +1,10 @@
 #include "../minitalk.h"
+#include <stdlib.h>
+
+void error(char *msg) {
+  ft_printf("%s\n", msg);
+  exit(1);
+}
 
 int ft_atoi(const char *str) {
   int sign;
@@ -21,30 +27,49 @@ int ft_atoi(const char *str) {
   return (result * sign);
 }
 
+t_bool check_args(int argc, char **argv) {
+  int i;
+
+  i = 0;
+  if (argc != 3)
+    return (FALSE);
+  while (argv[1][i] != '\0') {
+    if (argv[1][i] < '0' || argv[1][i] > '9')
+      return (FALSE);
+    i++;
+  }
+  if (ft_atoi(argv[1]) <= 0)
+    return (FALSE);
+  return (TRUE);
+}
+
+void send_signal(int pid, char c) {
+  int bit;
+
+  bit = 0;
+  while (bit < 8) {
+    if (c & (1 << bit)) {
+      if (kill(pid, SIGUSR2) == -1)
+        error("Error occurred: failed to send signal");
+    } else {
+      if (kill(pid, SIGUSR1) == -1)
+        error("Error occurred: failed to send signal");
+    }
+    usleep(100);
+    bit++;
+  }
+}
+
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    printf("esto no esta bien");
-    return 0;
+  int byte;
+
+  if (!check_args(argc, argv))
+    error("Error occurred: invalid arguments");
+  byte = 0;
+  while (argv[2][byte]) {
+    send_signal(ft_atoi(argv[1]), argv[2][byte]);
+    byte++;
   }
-  printf("argc: %d\n", argc);
-  printf("pid: %d\n", ft_atoi(argv[1]));
-
-  char *str = "hola";
-
-  while (*str){
-    write(1, &str, 1);
-    str++;
-  }
-
-  // kill(ft_atoi(argv[1]), 12);
-  // kill(ft_atoi(argv[1]), 10);
-  // usleep(50);
-  // kill(ft_atoi(argv[1]), 12);
-  // usleep(50);
-  // kill(ft_atoi(argv[1]), 12);
-  // usleep(50);
-  // kill(ft_atoi(argv[1]), 10);
-  // usleep(50);
-  // kill(ft_atoi(argv[1]), 10);
+  send_signal(ft_atoi(argv[1]), '\0');
   return 0;
 }

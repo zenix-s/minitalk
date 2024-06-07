@@ -1,11 +1,18 @@
 #ifndef MINITALK_H
 #define MINITALK_H
 
-// write, read, getpid, kill, pause
-#include <unistd.h>
+typedef struct s_bit_buffer {
+  int byte;
+  int bit;
+} t_bit_buffer;
 
-// // printf, scanf
-// # include <stdio.h>
+typedef enum s_bool {
+  FALSE,
+  TRUE
+} t_bool;
+
+// write, getpid, kill, pause
+#include <unistd.h>
 
 // signal, sigaction, sigemptyset, sigaddset
 #include <signal.h>
