@@ -6,7 +6,7 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:31:11 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/12 16:01:47 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:12:57 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <signal.h>
 
 // libft
-#include "./lib/libft/src/libft.h"
+#include "./lib/libft/libft.h"
 
 typedef struct s_bit_buffer
 {
