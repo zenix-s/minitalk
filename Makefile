@@ -1,9 +1,9 @@
 SRC_CLIENT = ./src/app/client.c 
 SRC_SERVER = ./src/app/server.c
 
-SRCD_PRINTF = ./src/lib/printf
+SRCD_LIBFT = ./src/lib/libft
 
-PRINTF = libftprintf.a
+LIBFT = libft.a
 
 CLIENT = client
 SERVER = server
@@ -14,27 +14,27 @@ CC_FLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 $(CLIENT):
-	@$(CC) $(CC_FLAGS) $(SRC_CLIENT) $(SRCD_PRINTF)/$(PRINTF) -o $(CLIENT)
+	@$(CC) $(CC_FLAGS) $(SRC_CLIENT) $(SRCD_LIBFT)/$(LIBFT) -o $(CLIENT)
 	@echo "Client Compiled!"
 
 $(SERVER):
-	@$(CC) $(CC_FLAGS) $(SRC_SERVER) $(SRCD_PRINTF)/$(PRINTF) -o $(SERVER)
+	@$(CC) $(CC_FLAGS) $(SRC_SERVER) $(SRCD_LIBFT)/$(LIBFT) -o $(SERVER)
 	@echo "Server Compiled!"
 
-$(PRINTF):
-	@$(MAKE) -s all -C $(SRCD_PRINTF) > /dev/null
-	@echo "Printf Compiled!"
+$(LIBFT):
+	@$(MAKE) -s all -C $(SRCD_LIBFT) > /dev/null
+	@echo "libft Compiled!"
 
-all: $(PRINTF) $(CLIENT) $(SERVER)
-	@$(MAKE) fclean -C $(SRCD_PRINTF) > /dev/null
+all: $(LIBFT) $(CLIENT) $(SERVER)
+	@$(MAKE) fclean -C $(SRCD_LIBFT) > /dev/null
 	@echo "All Done"
 
 clean:
-	@$(MAKE) clean -C $(SRCD_PRINTF) > /dev/null
+	@$(MAKE) clean -C $(SRCD_LIBFT) > /dev/null
 
 fclean: clean
 	@$(RM) $(CLIENT) $(SERVER)
-	@$(MAKE) fclean -C $(SRCD_PRINTF) > /dev/null
+	@$(MAKE) fclean -C $(SRCD_LIBFT) > /dev/null
 	@echo "All Cleaned"
 
 re: fclean all

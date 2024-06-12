@@ -6,40 +6,16 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:30:53 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:30:55 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:36:50 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
-#include <stdlib.h>
 
 void	error(char *msg)
 {
 	ft_printf("%s\n", msg);
 	exit(1);
-}
-
-int	ft_atoi(const char *str)
-{
-	int		sign;
-	size_t	result;
-	size_t	i;
-
-	result = 0;
-	sign = 1;
-	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
-	if (str[i] == '-')
-		sign = -1;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = (result * 10) + (str[i] - '0');
-		i++;
-	}
-	return (result * sign);
 }
 
 t_bool	check_args(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:31:11 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:31:57 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:32:14 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 // signal, sigaction, sigemptyset, sigaddset
 # include <signal.h>
 
-// ft_printf
-# include "./lib/printf/src/ft_printf.h"
+// libft
+#include "./lib/libft/src/libft.h"
 
 typedef struct s_bit_buffer
 {
@@ -28,10 +28,5 @@ typedef struct s_bit_buffer
 	int	bit;
 }		t_bit_buffer;
 
-typedef enum s_bool
-{
-	FALSE,
-	TRUE
-}		t_bool;
 
 #endif
