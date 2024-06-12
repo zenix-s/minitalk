@@ -20,13 +20,12 @@
 # include <signal.h>
 
 // libft
-#include "./lib/libft/libft.h"
+# include "./lib/libft/libft.h"
 
 typedef struct s_bit_buffer
 {
 	int	byte;
 	int	bit;
 }		t_bit_buffer;
-
 
 #endif
