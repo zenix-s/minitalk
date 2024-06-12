@@ -6,7 +6,7 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:31:11 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/12 14:32:14 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:01:47 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // write, getpid, kill, pause
 # include <unistd.h>
 
-// signal, sigaction, sigemptyset, sigaddset
+// sigaction, sigemptyset, sigaddset
 # include <signal.h>
 
 // libft
