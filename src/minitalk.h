@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: serferna <serferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:31:11 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:31:57 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/24 01:05:55 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,12 +6,11 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:30:53 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:30:55 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:16:03 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
-#include <stdlib.h>
 
 void	error(char *msg)
 {
@@ -48,10 +47,7 @@ void	send_signal(int pid, char c)
 		{
 			if (kill(pid, SIGUSR2) == -1)
 				error("Error occurred: failed to send signal");
-		}
-		else
-		{
-			if (kill(pid, SIGUSR1) == -1)
+			else if (kill(pid, SIGUSR1) == -1)
 				error("Error occurred: failed to send signal");
 		}
 		usleep(100);
