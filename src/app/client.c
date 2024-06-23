@@ -14,7 +14,7 @@
 
 void	error(char *msg)
 {
-	ft_printf("%s\n", msg);
+	ft_putstr_fd(msg, 2);
 	exit(1);
 }
 

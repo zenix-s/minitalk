@@ -1,3 +1,6 @@
+[submodule "src/lib/printf"]
+	path = src/lib/printf
+	url = git@github.com:zenix-s/ft_printf.git
 [submodule "src/lib/libft"]
 	path = src/lib/libft
 	url = git@github.com:zenix-s/libft.git
