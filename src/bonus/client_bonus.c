@@ -6,7 +6,7 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 01:13:32 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/24 12:48:44 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:30:44 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	send_signal(int pid, char c)
 		{
 			if (kill(pid, SIGUSR2) == -1)
 				error("Error occurred: failed to send signal");
-			else if (kill(pid, SIGUSR1) == -1)
+		}
+		else
+		{
+			if (kill(pid, SIGUSR1) == -1)
 				error("Error occurred: failed to send signal");
 		}
-		// usleep(100);
 		pause();
+		usleep(100);
 		bit++;
 	}
 }
@@ -78,7 +81,6 @@ int    main(const int argc, const char **argv)
 	pid = getpid();
 	ft_printf("Id del servidor: %d\n", pid);
 
-	(void)byte;
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
@@ -90,25 +92,13 @@ int    main(const int argc, const char **argv)
 	if (!check_args(argc, argv))
 		error("Error occurred: invalid arguments");
 	server_id = ft_atoi(argv[1]);
-	// kill(server_id, SIGUSR1);
-	// pause();
-	// kill(server_id, SIGUSR1);
-	// pause();
-	// kill(server_id, SIGUSR1);
-	// pause();
-	// kill(server_id, SIGUSR1);
-	// pause();
-	// int i = 0;
-	// while(i < 8)
-	// {
-	// 	if (i % 2 == 0)
-	// 		kill(server_id, SIGUSR1);
-	// 	else
-	// 		kill(server_id, SIGUSR2);
-	// 	pause();
-	// 	i++;
-	// }
-	send_signal(server_id, 'c');
+	byte = 0;
+	while (argv[2][byte])
+	{
+		send_signal(server_id, argv[2][byte]);
+		byte++;
+	}
+	send_signal(server_id, '\0');
 
 
 

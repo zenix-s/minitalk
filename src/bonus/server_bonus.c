@@ -6,20 +6,41 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 01:13:40 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/24 12:31:00 by serferna         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:28:54 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <signal.h>
-
+#include "../minitalk.h"
 # include "../lib/libft/libft.h"
 
 
-static void	signal_handler(const int sig, siginfo_t *info, void *context)
+// static void	signal_handler(const int sig, siginfo_t *info, void *context)
+// {
+//     (void)context;
+//     ft_printf("Hola: %d from %d\n", sig, (int)info->si_pid);
+// 	kill(info->si_pid, SIGUSR1);
+// }
+
+
+t_bit_buffer	g_bit_buffer = {0, 0};
+
+static void	signal_handler(int sig, siginfo_t *info, void *context)
 {
-    (void)context;
-    ft_printf("Hola: %d from %d\n", sig, (int)info->si_pid);
+	(void)context;
+	if (sig == SIGUSR1)
+		g_bit_buffer.byte |= (0 << g_bit_buffer.bit);
+	else if (sig == SIGUSR2)
+		g_bit_buffer.byte |= (1 << g_bit_buffer.bit);
 	kill(info->si_pid, SIGUSR1);
+	g_bit_buffer.bit++;
+	if (g_bit_buffer.bit >= 8)
+	{
+		if (g_bit_buffer.byte != 0)
+			write(1, &g_bit_buffer.byte, 1);
+		g_bit_buffer.byte = 0;
+		g_bit_buffer.bit = 0;
+	}
 }
 
 void	init_sigaction(void)
@@ -35,15 +56,13 @@ void	init_sigaction(void)
 	sigaction(SIGUSR2, &sa, 0);
 }
 
-int    main(void)
+int	main(void)
 {
 	pid_t	pid;
 
 	pid = getpid();
 	ft_printf("Id del servidor: %d\n", pid);
-	init_sigaction();
-
-	while(1)
-		pause();
-    return 0;
+	while (1)
+		init_sigaction();
+	return (0);
 }
