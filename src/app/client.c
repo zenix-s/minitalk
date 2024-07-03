@@ -18,7 +18,7 @@ void	error(char *msg)
 	exit(1);
 }
 
-t_bool	check_args(int argc, char **argv)
+t_bool	check_args(const int argc, char **argv)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ t_bool	check_args(int argc, char **argv)
 	return (TRUE);
 }
 
-void	send_signal(int pid, char c)
+void	send_signal(const int pid, const char c)
 {
 	int	bit;
 
@@ -44,29 +44,30 @@ void	send_signal(int pid, char c)
 	while (bit < 8)
 	{
 		if (c & (1 << bit))
-		{
 			if (kill(pid, SIGUSR2) == -1)
 				error("Error occurred: failed to send signal");
-			else if (kill(pid, SIGUSR1) == -1)
+		else
+			if (kill(pid, SIGUSR1) == -1)
 				error("Error occurred: failed to send signal");
-		}
 		usleep(100);
 		bit++;
 	}
 }
 
-int	main(int argc, char **argv)
+int	main(const int argc, const char **argv)
 {
 	int	byte;
+	int pid;
 
 	if (!check_args(argc, argv))
 		error("Error occurred: invalid arguments");
+	pid = ft_atoi(argv[1]);
 	byte = 0;
 	while (argv[2][byte])
 	{
-		send_signal(ft_atoi(argv[1]), argv[2][byte]);
+		send_signal(pid, argv[2][byte]);
 		byte++;
 	}
-	send_signal(ft_atoi(argv[1]), '\0');
+	send_signal(pid, '\0');
 	return (0);
 }

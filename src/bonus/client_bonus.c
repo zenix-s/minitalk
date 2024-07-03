@@ -6,14 +6,15 @@
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 01:13:32 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/25 12:30:44 by serferna         ###   ########.fr       */
+/*   Updated: 2024/07/04 00:20:00 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 # include <signal.h>
-
 # include "../lib/libft/libft.h"
+
+int g_confirmation = 0;
 
 void	error(char *msg)
 {
@@ -42,10 +43,12 @@ t_bool	check_args(const int argc, const char **argv)
 void	send_signal(int pid, char c)
 {
 	int	bit;
+	int i;
 
 	bit = 0;
 	while (bit < 8)
 	{
+		g_confirmation = 0;
 		if (c & (1 << bit))
 		{
 			if (kill(pid, SIGUSR2) == -1)
@@ -56,61 +59,51 @@ void	send_signal(int pid, char c)
 			if (kill(pid, SIGUSR1) == -1)
 				error("Error occurred: failed to send signal");
 		}
-		pause();
-		usleep(100);
+		i = 0;
+		while (i++ <= 1000)
+		{
+			if (g_confirmation)
+                break;
+            usleep(100);
+		}
+		if (!g_confirmation)
+			error("No confirmation has been recived");
 		bit++;
 	}
 }
 
-static void	signal_handler(const int sig, siginfo_t *info, void *context)
+static void	signal_handler(const int sig)
 {
-	(void)context;
-	(void)info;
-	ft_printf("Hola: %d\n", sig);
+	(void)sig;
+	g_confirmation = 1;
+}
+
+void send_message(const char** argv, const pid_t server_pid)
+{
+	int	byte;
+
+	byte = 0;
+	while (argv[2][byte])
+	{
+		send_signal(server_pid, argv[2][byte]);
+		byte++;
+	}
+	send_signal(server_pid, '\0');
 }
 
 int    main(const int argc, const char **argv)
 {
-	(void)argv;
 	struct sigaction	sa;
-	int	byte;
-	int server_id;
-
-	pid_t	pid;
-
-	pid = getpid();
-	ft_printf("Id del servidor: %d\n", pid);
-
-	sa.sa_sigaction = &signal_handler;
-	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);
-	sigaction(SIGUSR1, &sa, 0);
-	sigaction(SIGUSR2, &sa, 0);
+	pid_t server_pid;
 
 	if (!check_args(argc, argv))
-		error("Error occurred: invalid arguments");
-	server_id = ft_atoi(argv[1]);
-	byte = 0;
-	while (argv[2][byte])
-	{
-		send_signal(server_id, argv[2][byte]);
-		byte++;
-	}
-	send_signal(server_id, '\0');
-
-
-
-	// byte = 0;
-	// while (argv[2][byte])
-	// {
-	// 	send_signal(ft_atoi(argv[1]), argv[2][byte]);
-	// 	byte++;
-	// }
-	// send_signal(ft_atoi(argv[1]), '\0');
-
-	// while(1)
-	// 	pause();
+		return (ft_putstr_fd("Error\n", 2), 1);
+	sa.sa_handler = signal_handler;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(SIGUSR1, &sa, 0) == -1)
+		return (ft_putstr_fd("Error\n", 2), 1);
+	server_pid = (pid_t)ft_atoi(argv[1]);
+	send_message(argv, server_pid);
     return 0;
 }

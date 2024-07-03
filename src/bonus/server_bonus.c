@@ -14,15 +14,6 @@
 #include "../minitalk.h"
 # include "../lib/libft/libft.h"
 
-
-// static void	signal_handler(const int sig, siginfo_t *info, void *context)
-// {
-//     (void)context;
-//     ft_printf("Hola: %d from %d\n", sig, (int)info->si_pid);
-// 	kill(info->si_pid, SIGUSR1);
-// }
-
-
 t_bit_buffer	g_bit_buffer = {0, 0};
 
 static void	signal_handler(int sig, siginfo_t *info, void *context)
@@ -32,15 +23,14 @@ static void	signal_handler(int sig, siginfo_t *info, void *context)
 		g_bit_buffer.byte |= (0 << g_bit_buffer.bit);
 	else if (sig == SIGUSR2)
 		g_bit_buffer.byte |= (1 << g_bit_buffer.bit);
-	kill(info->si_pid, SIGUSR1);
 	g_bit_buffer.bit++;
 	if (g_bit_buffer.bit >= 8)
 	{
-		if (g_bit_buffer.byte != 0)
-			write(1, &g_bit_buffer.byte, 1);
+		write(1, &g_bit_buffer.byte, 1);
 		g_bit_buffer.byte = 0;
 		g_bit_buffer.bit = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
 void	init_sigaction(void)
@@ -62,7 +52,8 @@ int	main(void)
 
 	pid = getpid();
 	ft_printf("Id del servidor: %d\n", pid);
-	while (1)
 		init_sigaction();
+	while (1)
+		pause();
 	return (0);
 }
