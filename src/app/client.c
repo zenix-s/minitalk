@@ -1,73 +1,88 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 11:30:53 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/12 16:16:03 by serferna         ###   ########.fr       */
+/*   Created: 2024/06/24 01:13:32 by serferna          #+#    #+#             */
+/*   Updated: 2024/07/04 00:20:00 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
-void	error(char *msg)
-{
-	ft_putstr_fd(msg, 2);
-	exit(1);
-}
+int			g_confirmation = 0;
 
-t_bool	check_args(const int argc, char **argv)
+void	wait_confirmation(void)
 {
 	int	i;
 
 	i = 0;
-	if (argc != 3)
-		return (FALSE);
-	while (argv[1][i] != '\0')
+	while (i++ <= 1000)
 	{
-		if (argv[1][i] < '0' || argv[1][i] > '9')
-			return (FALSE);
-		i++;
+		if (g_confirmation)
+			break ;
+		usleep(100);
 	}
-	if (ft_atoi(argv[1]) <= 0)
-		return (FALSE);
-	return (TRUE);
+	if (!g_confirmation)
+		exit_error("No confirmation has been recived");
 }
 
 void	send_signal(const int pid, const char c)
 {
 	int	bit;
 
-	bit = 0;
-	while (bit < 8)
+	bit = -1;
+	while (++bit < 8)
 	{
+		g_confirmation = 0;
 		if (c & (1 << bit))
+		{
 			if (kill(pid, SIGUSR2) == -1)
-				error("Error occurred: failed to send signal");
+				exit_error("failed to send signal");
+		}
 		else
+		{
 			if (kill(pid, SIGUSR1) == -1)
-				error("Error occurred: failed to send signal");
-		usleep(100);
-		bit++;
+				exit_error("failed to send signal");
+		}
+		wait_confirmation();
 	}
+}
+
+static void	signal_handler(const int sig)
+{
+	(void)sig;
+	g_confirmation = 1;
+}
+
+void	send_message(const pid_t server_pid, const char **argv)
+{
+	int	byte;
+
+	byte = 0;
+	while (argv[2][byte])
+	{
+		send_signal(server_pid, argv[2][byte]);
+		byte++;
+	}
+	send_signal(server_pid, '\0');
 }
 
 int	main(const int argc, const char **argv)
 {
-	int	byte;
-	int pid;
+	struct sigaction	sa;
+	pid_t				server_pid;
 
 	if (!check_args(argc, argv))
-		error("Error occurred: invalid arguments");
-	pid = ft_atoi(argv[1]);
-	byte = 0;
-	while (argv[2][byte])
-	{
-		send_signal(pid, argv[2][byte]);
-		byte++;
-	}
-	send_signal(pid, '\0');
+		return (exit_error("Error\n"), 1);
+	sa.sa_handler = signal_handler;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(SIGUSR1, &sa, 0) == -1)
+		return (exit_error("Error\n"), 1);
+	server_pid = ft_atoi(argv[1]);
+	send_message(server_pid, argv);
 	return (0);
 }

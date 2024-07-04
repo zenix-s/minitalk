@@ -16,8 +16,6 @@
 // signal, sigaction, sigemptyset, sigaddset
 # include <signal.h>
 
-// ft_printf
-//# include "./lib/printf/src/ft_printf.h"
 # include "./lib/libft/libft.h"
 
 typedef struct s_bit_buffer
@@ -26,5 +24,7 @@ typedef struct s_bit_buffer
 	int	bit;
 }		t_bit_buffer;
 
+void    exit_error(char *msg);
+t_bool	check_args(const int argc, const char **argv);
 
 #endif

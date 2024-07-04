@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: serferna <serferna@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 11:31:03 by serferna          #+#    #+#             */
-/*   Updated: 2024/06/12 16:14:45 by serferna         ###   ########.fr       */
+/*   Created: 2024/06/24 01:13:40 by serferna          #+#    #+#             */
+/*   Updated: 2024/06/25 12:28:54 by serferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../lib/libft/libft.h"
 #include "../minitalk.h"
 #include <signal.h>
-#include <unistd.h>
 
 t_bit_buffer	g_bit_buffer = {0, 0};
 
 static void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)context;
-	(void)info;
 	if (sig == SIGUSR1)
 		g_bit_buffer.byte |= (0 << g_bit_buffer.bit);
 	else if (sig == SIGUSR2)
@@ -27,11 +26,11 @@ static void	signal_handler(int sig, siginfo_t *info, void *context)
 	g_bit_buffer.bit++;
 	if (g_bit_buffer.bit >= 8)
 	{
-		if (g_bit_buffer.byte != 0)
-			write(1, &g_bit_buffer.byte, 1);
+		write(1, &g_bit_buffer.byte, 1);
 		g_bit_buffer.byte = 0;
 		g_bit_buffer.bit = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
 void	init_sigaction(void)
@@ -53,7 +52,8 @@ int	main(void)
 
 	pid = getpid();
 	ft_printf("Id del servidor: %d\n", pid);
+	init_sigaction();
 	while (1)
-		init_sigaction();
+		pause();
 	return (0);
 }
