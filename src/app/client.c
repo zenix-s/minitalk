@@ -14,7 +14,7 @@
 
 int			g_confirmation = 0;
 
-void	wait_confirmation(void)
+static void	wait_confirmation(void)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ void	wait_confirmation(void)
 		exit_error("No confirmation has been recived");
 }
 
-void	send_signal(const int pid, const char c)
+static void	send_signal(const int pid, const char c)
 {
 	int	bit;
 
@@ -57,7 +57,7 @@ static void	signal_handler(const int sig)
 	g_confirmation = 1;
 }
 
-void	send_message(const pid_t server_pid, const char **argv)
+static void	send_message(const pid_t server_pid, const char **argv)
 {
 	int	byte;
 

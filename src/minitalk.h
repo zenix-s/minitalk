@@ -14,9 +14,8 @@
 # define MINITALK_H
 
 // signal, sigaction, sigemptyset, sigaddset
-# include <signal.h>
-
 # include "./lib/libft/libft.h"
+# include <signal.h>
 
 typedef struct s_bit_buffer
 {
@@ -24,7 +23,7 @@ typedef struct s_bit_buffer
 	int	bit;
 }		t_bit_buffer;
 
-void    exit_error(char *msg);
+void	exit_error(char *msg);
 t_bool	check_args(const int argc, const char **argv);
 
 #endif

@@ -33,7 +33,7 @@ static void	signal_handler(int sig, siginfo_t *info, void *context)
 	kill(info->si_pid, SIGUSR1);
 }
 
-void	init_sigaction(void)
+static void	init_sigaction(void)
 {
 	struct sigaction	sa;
 
